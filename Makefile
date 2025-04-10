@@ -552,13 +552,23 @@ compiler_moc_header_clean:
 GeneratedFiles/debug/moc_glwidget.cpp: glwidget.h \
 		RenderCamera.h \
 		SceneManager.h \
+		PerspectiveCamera.h \
+		Hexahedron.h \
 		SceneObject.h \
+		Axes.h \
 		GeneratedFiles/debug/moc_predefs.h \
 		/usr/bin/moc
 	/usr/bin/moc $(DEFINES) --include /home/benni/School/3DCV/Framework/GeneratedFiles/debug/moc_predefs.h -I/usr/lib/qt/mkspecs/linux-g++ -I/home/benni/School/3DCV/Framework -I/home/benni/School/3DCV/Framework/GeneratedFiles -I/home/benni/School/3DCV/Framework -I/home/benni/School/3DCV/Framework/GeneratedFiles/Debug -I/home/benni/School/3DCV/Framework/external/eigen-3.4.0 -I/usr/include/qt -I/usr/include/qt/QtOpenGL -I/usr/include/qt/QtWidgets -I/usr/include/qt/QtGui -I/usr/include/qt/QtCore -I/usr/include/c++/14.2.1 -I/usr/include/c++/14.2.1/x86_64-pc-linux-gnu -I/usr/include/c++/14.2.1/backward -I/usr/lib/gcc/x86_64-pc-linux-gnu/14.2.1/include -I/usr/local/include -I/usr/lib/gcc/x86_64-pc-linux-gnu/14.2.1/include-fixed -I/usr/include glwidget.h -o GeneratedFiles/debug/moc_glwidget.cpp
 
 GeneratedFiles/debug/moc_mainwindow.cpp: mainwindow.h \
 		GeneratedFiles/ui_mainwindow.h \
+		glwidget.h \
+		RenderCamera.h \
+		SceneManager.h \
+		PerspectiveCamera.h \
+		Hexahedron.h \
+		SceneObject.h \
+		Axes.h \
 		GeneratedFiles/debug/moc_predefs.h \
 		/usr/bin/moc
 	/usr/bin/moc $(DEFINES) --include /home/benni/School/3DCV/Framework/GeneratedFiles/debug/moc_predefs.h -I/usr/lib/qt/mkspecs/linux-g++ -I/home/benni/School/3DCV/Framework -I/home/benni/School/3DCV/Framework/GeneratedFiles -I/home/benni/School/3DCV/Framework -I/home/benni/School/3DCV/Framework/GeneratedFiles/Debug -I/home/benni/School/3DCV/Framework/external/eigen-3.4.0 -I/usr/include/qt -I/usr/include/qt/QtOpenGL -I/usr/include/qt/QtWidgets -I/usr/include/qt/QtGui -I/usr/include/qt/QtCore -I/usr/include/c++/14.2.1 -I/usr/include/c++/14.2.1/x86_64-pc-linux-gnu -I/usr/include/c++/14.2.1/backward -I/usr/lib/gcc/x86_64-pc-linux-gnu/14.2.1/include -I/usr/local/include -I/usr/lib/gcc/x86_64-pc-linux-gnu/14.2.1/include-fixed -I/usr/include mainwindow.h -o GeneratedFiles/debug/moc_mainwindow.cpp
@@ -580,7 +590,10 @@ GeneratedFiles/ui_mainwindow.h: mainwindow.ui \
 		glwidget.h \
 		RenderCamera.h \
 		SceneManager.h \
-		SceneObject.h
+		PerspectiveCamera.h \
+		Hexahedron.h \
+		SceneObject.h \
+		Axes.h
 	/usr/bin/uic mainwindow.ui -o GeneratedFiles/ui_mainwindow.h
 
 compiler_yacc_decl_make_all:
@@ -596,19 +609,33 @@ compiler_clean: compiler_moc_predefs_clean compiler_moc_header_clean compiler_ui
 debug/glwidget.o: glwidget.cpp glwidget.h \
 		RenderCamera.h \
 		SceneManager.h \
+		PerspectiveCamera.h \
+		Hexahedron.h \
 		SceneObject.h \
 		Axes.h \
-		Hexahedron.h \
-		PerspectiveCamera.h \
 		PointCloud.h
 	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o debug/glwidget.o glwidget.cpp
 
 debug/mainwindow.o: mainwindow.cpp mainwindow.h \
-		GeneratedFiles/ui_mainwindow.h
+		GeneratedFiles/ui_mainwindow.h \
+		glwidget.h \
+		RenderCamera.h \
+		SceneManager.h \
+		PerspectiveCamera.h \
+		Hexahedron.h \
+		SceneObject.h \
+		Axes.h
 	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o debug/mainwindow.o mainwindow.cpp
 
 debug/main.o: main.cpp mainwindow.h \
-		GeneratedFiles/ui_mainwindow.h
+		GeneratedFiles/ui_mainwindow.h \
+		glwidget.h \
+		RenderCamera.h \
+		SceneManager.h \
+		PerspectiveCamera.h \
+		Hexahedron.h \
+		SceneObject.h \
+		Axes.h
 	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o debug/main.o main.cpp
 
 debug/PointCloud.o: PointCloud.cpp PointCloud.h \
@@ -658,14 +685,18 @@ debug/RenderCamera.o: RenderCamera.cpp RenderCamera.h \
 	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o debug/RenderCamera.o RenderCamera.cpp
 
 debug/SceneManager.o: SceneManager.cpp SceneManager.h \
+		PerspectiveCamera.h \
+		Hexahedron.h \
 		SceneObject.h \
-		RenderCamera.h
+		RenderCamera.h \
+		Axes.h
 	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o debug/SceneManager.o SceneManager.cpp
 
 debug/SceneObject.o: SceneObject.cpp 
 	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o debug/SceneObject.o SceneObject.cpp
 
-debug/PerspectiveCamera.o: PerspectiveCamera.cpp Hexahedron.h \
+debug/PerspectiveCamera.o: PerspectiveCamera.cpp PerspectiveCamera.h \
+		Hexahedron.h \
 		SceneObject.h \
 		RenderCamera.h \
 		Axes.h
