@@ -33,7 +33,7 @@
 
 #include "Axes.h"
 #include "Hexahedron.h"
-#include "Plane.h"
+#include "PerspectiveCamera.h"
 #include "PointCloud.h"
 
 using namespace std;
@@ -49,18 +49,15 @@ GLWidget::GLWidget(QWidget *parent) : QOpenGLWidget(parent), pointSize(5) {
   renderer->reset();
   connect(renderer, &RenderCamera::changed, this, &GLWidget::onRendererChanged);
 
-  // setup the scene
-  // sceneManager.push_back(
-  // new Axes(E0, QMatrix4x4())); // the global world coordinate system
-  // sceneManager.push_back(new Plane(E0 + 4 * E3, -E3)); // some plane
-
   // TODO: Assignment 1, Part 1
   //       Add here your own new 3d scene objects, e.g. cubes, hexahedra, etc.,
-  //       analog to line 50 above and the respective Axes-class
-  //
 
-  // Draw hexahedron
-  sceneManager.push_back(new Hexahedron(E0 + E2, 10, 20, 30));
+  sceneManager.push_back(new Hexahedron(QVector4D(4, 4, 40, 1), 8, 8, 8));
+  sceneManager.push_back(new Hexahedron(QVector4D(2, 2, 20, 1), 2, 2, 2));
+  sceneManager.push_back(new Hexahedron(QVector4D(1, 1, 10, 1), 0.5, 0.5, 0.5));
+
+  sceneManager.push_back(new PerspectiveCamera(E1, 2.0f, 4.0f));
+
   // TODO: Assignement 1, Part 2
   //       Add here your own new scene
   //       object that represents a
@@ -69,7 +66,6 @@ GLWidget::GLWidget(QWidget *parent) : QOpenGLWidget(parent), pointSize(5) {
   //       relevant camera parameters,
   //       e.g. image plane, view axes,
   //       etc.
-  //
 
   // TODO: Assignement 1, Part 3
   //       Add to your perspective camera
