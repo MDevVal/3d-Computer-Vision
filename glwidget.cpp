@@ -5,22 +5,12 @@
 #include "glwidget.h"
 #include <QtGui>
 
-#if defined(__APPLE__)
-// we're on macOS and according to their documentation Apple hates developers
-#include <OpenGL/gl.h>
-#include <OpenGL/glu.h>
-#elif defined(WIN32) || defined(_WIN32) ||                                     \
-    defined(__WIN32) && !defined(__CYGWIN__)
-// windows, even if it's case insensitive QT-Create might generate a warning
-#include <gl/GL.h>
-#include <gl/GLU.h>
-#else
-// hopefully on linux
-// If can't be found, ensure that the following is installed:
-// libglu1-mesa-dev and/or mesa-common-dev
+#ifdef WIN32
+#include <windef.h>
+#endif
+
 #include <GL/gl.h>
 #include <GL/glu.h>
-#endif
 
 #include <QApplication>
 #include <QFileDialog>
@@ -129,6 +119,8 @@ void GLWidget::initializeGL() {
 //  redraws the canvas
 //
 void GLWidget::paintGL() {
+  glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+
   renderer->setup();
 
   sceneManager.draw(*renderer, COLOR_SCENE);
