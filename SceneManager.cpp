@@ -5,6 +5,7 @@
 //
 
 #include "SceneManager.h"
+#include "StereoCamera.h"
 
 using enum SceneObjectType;
 //
@@ -50,6 +51,19 @@ void SceneManager::draw(const RenderCamera &renderer,
         // invoke the stereo camera's reconstruction method. Part 3: This is the
         // place to invoke the stereo camera's reconstruction method using
         // misaligned stereo cameras.
+        auto stereo = static_cast<StereoCamera *>(obj);
+        for (auto toDraw : *this) {
+          if (toDraw->getType() == ST_HEXAHEDRON) {
+            auto hex = static_cast<Hexahedron *>(toDraw);
+            PerspectiveCamera::drawHexahedron(
+                const_cast<PerspectiveCamera &>(stereo->leftCamera()), renderer,
+                *hex, QColorConstants::Red, 1.0f);
+            PerspectiveCamera::drawHexahedron(
+                const_cast<PerspectiveCamera &>(stereo->rightCamera()),
+                renderer, *hex, QColorConstants::Blue, 1.0f);
+          }
+        }
+        obj->draw(renderer, COLOR_CAMERA, 3.0f);
         break;
       }
     }

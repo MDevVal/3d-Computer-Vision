@@ -11,7 +11,6 @@ INCLUDEPATH += ./GeneratedFiles \
     . \
     ./GeneratedFiles/Debug \
     ./external/eigen-3.4.0
-LIBS += -lglut
 CONFIG += c++20              # using c++20 leads to conflict in ./external/eigen-3.4.0/Eigen/src/Core/util/Meta.h
 QMAKE_CXXFLAGS += -std=c++20
 RESOURCES +=
@@ -33,7 +32,8 @@ HEADERS += ./glwidget.h \
     RenderCamera.h \
     SceneManager.h \
     SceneObject.h \
-    PerspectiveCamera.h
+    PerspectiveCamera.h \
+    StereoCamera.h 
 
 SOURCES += ./glwidget.cpp \
      ./mainwindow.cpp \
@@ -48,6 +48,7 @@ SOURCES += ./glwidget.cpp \
     RenderCamera.cpp \
     SceneManager.cpp \
     SceneObject.cpp \
-    PerspectiveCamera.cpp
+    PerspectiveCamera.cpp \
+    StereoCamera.cpp
 
 FORMS += ./mainwindow.ui

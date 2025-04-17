@@ -3,6 +3,7 @@
 // (c) Georg Umlauf, 2021+2022+2024
 //
 #include "glwidget.h"
+#include "StereoCamera.h"
 #include <QtGui>
 
 #ifdef WIN32
@@ -42,11 +43,16 @@ GLWidget::GLWidget(QWidget *parent) : QOpenGLWidget(parent), pointSize(5) {
   // TODO: Assignment 1, Part 1
   //       Add here your own new 3d scene objects, e.g. cubes, hexahedra, etc.,
 
+  sceneManager.push_back(new Axes());
+
   sceneManager.push_back(new Hexahedron(QVector4D(4, 4, 40, 1), 8, 8, 8));
   sceneManager.push_back(new Hexahedron(QVector4D(2, 2, 20, 1), 2, 2, 2));
   sceneManager.push_back(new Hexahedron(QVector4D(1, 1, 10, 1), 0.5, 0.5, 0.5));
 
-  sceneManager.push_back(new PerspectiveCamera(E1, 2.0f, 4.0f));
+  sceneManager.push_back(new StereoCamera(/* baseline */ 2.0f,
+                                          /* half‑plane size */ 2.0f,
+                                          /* focal length  */ 4.0f,
+                                          /* principal pt  */ {0, 0}));
 
   // TODO: Assignement 1, Part 2
   //       Add here your own new scene

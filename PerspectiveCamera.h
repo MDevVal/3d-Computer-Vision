@@ -1,6 +1,7 @@
 #pragma once
 
 #include "Hexahedron.h"
+#include "SceneObject.h"
 #include <QMatrix4x4>
 #include <QVector2D>
 #include <QVector3D>
@@ -25,9 +26,9 @@ public:
   void draw(const RenderCamera &renderer, const QColor &color = COLOR_CAMERA,
             float lineWidth = 3.0f) const override;
   QMatrix4x4 getPose();
+  QVector4D center;
 
 private:
-  QVector4D center;
   QMatrix4x4 pose;
   QVector2D imagePrincipalPoint;
   float imagePlaneSize;

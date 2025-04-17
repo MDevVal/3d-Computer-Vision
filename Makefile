@@ -40,7 +40,7 @@ DISTNAME      = Framework1.0.0
 DISTDIR = /home/benni/School/3DCV/Framework/debug/Framework1.0.0
 LINK          = g++
 LFLAGS        = -fPIC
-LIBS          = $(SUBLIBS) -lglut /usr/lib/libQt5OpenGL.so /usr/lib/libQt5Widgets.so /usr/lib/libQt5Gui.so /usr/lib/libQt5Core.so -lGL -lpthread   
+LIBS          = $(SUBLIBS) /usr/lib/libQt5OpenGL.so /usr/lib/libQt5Widgets.so /usr/lib/libQt5Gui.so /usr/lib/libQt5Core.so -lGL -lpthread   
 AR            = ar cqs
 RANLIB        = 
 SED           = sed
@@ -65,7 +65,8 @@ SOURCES       = glwidget.cpp \
 		RenderCamera.cpp \
 		SceneManager.cpp \
 		SceneObject.cpp \
-		PerspectiveCamera.cpp GeneratedFiles/debug/moc_glwidget.cpp \
+		PerspectiveCamera.cpp \
+		StereoCamera.cpp GeneratedFiles/debug/moc_glwidget.cpp \
 		GeneratedFiles/debug/moc_mainwindow.cpp \
 		GeneratedFiles/debug/moc_RenderCamera.cpp
 OBJECTS       = debug/glwidget.o \
@@ -82,6 +83,7 @@ OBJECTS       = debug/glwidget.o \
 		debug/SceneManager.o \
 		debug/SceneObject.o \
 		debug/PerspectiveCamera.o \
+		debug/StereoCamera.o \
 		debug/moc_glwidget.o \
 		debug/moc_mainwindow.o \
 		debug/moc_RenderCamera.o
@@ -221,7 +223,8 @@ DIST          = /usr/lib/qt/mkspecs/features/spec_pre.prf \
 		RenderCamera.h \
 		SceneManager.h \
 		SceneObject.h \
-		PerspectiveCamera.h glwidget.cpp \
+		PerspectiveCamera.h \
+		StereoCamera.h glwidget.cpp \
 		mainwindow.cpp \
 		main.cpp \
 		PointCloud.cpp \
@@ -234,7 +237,8 @@ DIST          = /usr/lib/qt/mkspecs/features/spec_pre.prf \
 		RenderCamera.cpp \
 		SceneManager.cpp \
 		SceneObject.cpp \
-		PerspectiveCamera.cpp
+		PerspectiveCamera.cpp \
+		StereoCamera.cpp
 QMAKE_TARGET  = Framework
 DESTDIR       = 
 TARGET        = Framework
@@ -512,8 +516,8 @@ distdir: FORCE
 	@test -d $(DISTDIR) || mkdir -p $(DISTDIR)
 	$(COPY_FILE) --parents $(DIST) $(DISTDIR)/
 	$(COPY_FILE) --parents /usr/lib/qt/mkspecs/features/data/dummy.cpp $(DISTDIR)/
-	$(COPY_FILE) --parents glwidget.h mainwindow.h PointCloud.h GLConvenience.h QtConvenience.h Axes.h Cube.h Hexahedron.h Plane.h RenderCamera.h SceneManager.h SceneObject.h PerspectiveCamera.h $(DISTDIR)/
-	$(COPY_FILE) --parents glwidget.cpp mainwindow.cpp main.cpp PointCloud.cpp GLConvenience.cpp QtConvenience.cpp Axes.cpp Cube.cpp Hexahedron.cpp Plane.cpp RenderCamera.cpp SceneManager.cpp SceneObject.cpp PerspectiveCamera.cpp $(DISTDIR)/
+	$(COPY_FILE) --parents glwidget.h mainwindow.h PointCloud.h GLConvenience.h QtConvenience.h Axes.h Cube.h Hexahedron.h Plane.h RenderCamera.h SceneManager.h SceneObject.h PerspectiveCamera.h StereoCamera.h $(DISTDIR)/
+	$(COPY_FILE) --parents glwidget.cpp mainwindow.cpp main.cpp PointCloud.cpp GLConvenience.cpp QtConvenience.cpp Axes.cpp Cube.cpp Hexahedron.cpp Plane.cpp RenderCamera.cpp SceneManager.cpp SceneObject.cpp PerspectiveCamera.cpp StereoCamera.cpp $(DISTDIR)/
 	$(COPY_FILE) --parents mainwindow.ui $(DISTDIR)/
 
 
@@ -562,13 +566,6 @@ GeneratedFiles/debug/moc_glwidget.cpp: glwidget.h \
 
 GeneratedFiles/debug/moc_mainwindow.cpp: mainwindow.h \
 		GeneratedFiles/ui_mainwindow.h \
-		glwidget.h \
-		RenderCamera.h \
-		SceneManager.h \
-		PerspectiveCamera.h \
-		Hexahedron.h \
-		SceneObject.h \
-		Axes.h \
 		GeneratedFiles/debug/moc_predefs.h \
 		/usr/bin/moc
 	/usr/bin/moc $(DEFINES) --include /home/benni/School/3DCV/Framework/GeneratedFiles/debug/moc_predefs.h -I/usr/lib/qt/mkspecs/linux-g++ -I/home/benni/School/3DCV/Framework -I/home/benni/School/3DCV/Framework/GeneratedFiles -I/home/benni/School/3DCV/Framework -I/home/benni/School/3DCV/Framework/GeneratedFiles/Debug -I/home/benni/School/3DCV/Framework/external/eigen-3.4.0 -I/usr/include/qt -I/usr/include/qt/QtOpenGL -I/usr/include/qt/QtWidgets -I/usr/include/qt/QtGui -I/usr/include/qt/QtCore -I/usr/include/c++/14.2.1 -I/usr/include/c++/14.2.1/x86_64-pc-linux-gnu -I/usr/include/c++/14.2.1/backward -I/usr/lib/gcc/x86_64-pc-linux-gnu/14.2.1/include -I/usr/local/include -I/usr/lib/gcc/x86_64-pc-linux-gnu/14.2.1/include-fixed -I/usr/include mainwindow.h -o GeneratedFiles/debug/moc_mainwindow.cpp
@@ -613,29 +610,16 @@ debug/glwidget.o: glwidget.cpp glwidget.h \
 		Hexahedron.h \
 		SceneObject.h \
 		Axes.h \
+		StereoCamera.h \
 		PointCloud.h
 	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o debug/glwidget.o glwidget.cpp
 
 debug/mainwindow.o: mainwindow.cpp mainwindow.h \
-		GeneratedFiles/ui_mainwindow.h \
-		glwidget.h \
-		RenderCamera.h \
-		SceneManager.h \
-		PerspectiveCamera.h \
-		Hexahedron.h \
-		SceneObject.h \
-		Axes.h
+		GeneratedFiles/ui_mainwindow.h
 	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o debug/mainwindow.o mainwindow.cpp
 
 debug/main.o: main.cpp mainwindow.h \
-		GeneratedFiles/ui_mainwindow.h \
-		glwidget.h \
-		RenderCamera.h \
-		SceneManager.h \
-		PerspectiveCamera.h \
-		Hexahedron.h \
-		SceneObject.h \
-		Axes.h
+		GeneratedFiles/ui_mainwindow.h
 	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o debug/main.o main.cpp
 
 debug/PointCloud.o: PointCloud.cpp PointCloud.h \
@@ -689,7 +673,8 @@ debug/SceneManager.o: SceneManager.cpp SceneManager.h \
 		Hexahedron.h \
 		SceneObject.h \
 		RenderCamera.h \
-		Axes.h
+		Axes.h \
+		StereoCamera.h
 	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o debug/SceneManager.o SceneManager.cpp
 
 debug/SceneObject.o: SceneObject.cpp 
@@ -701,6 +686,14 @@ debug/PerspectiveCamera.o: PerspectiveCamera.cpp PerspectiveCamera.h \
 		RenderCamera.h \
 		Axes.h
 	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o debug/PerspectiveCamera.o PerspectiveCamera.cpp
+
+debug/StereoCamera.o: StereoCamera.cpp StereoCamera.h \
+		PerspectiveCamera.h \
+		Hexahedron.h \
+		SceneObject.h \
+		RenderCamera.h \
+		Axes.h
+	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o debug/StereoCamera.o StereoCamera.cpp
 
 debug/moc_glwidget.o: GeneratedFiles/debug/moc_glwidget.cpp 
 	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o debug/moc_glwidget.o GeneratedFiles/debug/moc_glwidget.cpp
