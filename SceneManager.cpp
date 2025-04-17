@@ -52,15 +52,54 @@ void SceneManager::draw(const RenderCamera &renderer,
         // place to invoke the stereo camera's reconstruction method using
         // misaligned stereo cameras.
         auto stereo = static_cast<StereoCamera *>(obj);
+        auto &leftCam = const_cast<PerspectiveCamera &>(stereo->leftCamera());
+        auto &rightCam = const_cast<PerspectiveCamera &>(stereo->rightCamera());
+
         for (auto toDraw : *this) {
           if (toDraw->getType() == ST_HEXAHEDRON) {
             auto hex = static_cast<Hexahedron *>(toDraw);
-            PerspectiveCamera::drawHexahedron(
-                const_cast<PerspectiveCamera &>(stereo->leftCamera()), renderer,
-                *hex, QColorConstants::Red, 1.0f);
-            PerspectiveCamera::drawHexahedron(
-                const_cast<PerspectiveCamera &>(stereo->rightCamera()),
-                renderer, *hex, QColorConstants::Blue, 1.0f);
+
+            PerspectiveCamera::drawHexahedron(leftCam, renderer, *hex,
+                                              QColorConstants::Red, 1.0f);
+            PerspectiveCamera::drawHexahedron(rightCam, renderer, *hex,
+                                              QColorConstants::Blue, 1.0f);
+
+            Hexahedron recon;
+            int idx = 0;
+            for (const auto &pt : *hex) {
+              float dx = pt.x() - leftCam.center.x();
+              float dy = pt.y() - leftCam.center.y();
+              float dz = pt.z() - leftCam.center.z();
+              float nXL = leftCam.pose(0, 0) * dx + leftCam.pose(1, 0) * dy +
+                          leftCam.pose(2, 0) * dz;
+              float nYL = leftCam.pose(0, 1) * dx + leftCam.pose(1, 1) * dy +
+                          leftCam.pose(2, 1) * dz;
+              float dL = leftCam.pose(0, 2) * dx + leftCam.pose(1, 2) * dy +
+                         leftCam.pose(2, 2) * dz;
+              float xl = leftCam.imagePrincipalPoint.x() +
+                         leftCam.imagePlaneDistance * nXL / dL;
+              float yl = leftCam.imagePrincipalPoint.y() +
+                         leftCam.imagePlaneDistance * nYL / dL;
+
+              dx = pt.x() - rightCam.center.x();
+              dy = pt.y() - rightCam.center.y();
+              dz = pt.z() - rightCam.center.z();
+              float nXR = rightCam.pose(0, 0) * dx + rightCam.pose(1, 0) * dy +
+                          rightCam.pose(2, 0) * dz;
+              float nYR = rightCam.pose(0, 1) * dx + rightCam.pose(1, 1) * dy +
+                          rightCam.pose(2, 1) * dz;
+              float dR = rightCam.pose(0, 2) * dx + rightCam.pose(1, 2) * dy +
+                         rightCam.pose(2, 2) * dz;
+              float xr = rightCam.imagePrincipalPoint.x() +
+                         rightCam.imagePlaneDistance * nXR / dR;
+              float yr = rightCam.imagePrincipalPoint.y() +
+                         rightCam.imagePlaneDistance * nYR / dR;
+
+              QVector3D P = stereo->triangulate({xl, yl}, {xr, yr});
+              P /= 25; // scale down
+              recon[idx++] = P;
+            }
+            recon.draw(renderer, QColorConstants::Yellow, 1.5f);
           }
         }
         obj->draw(renderer, COLOR_CAMERA, 3.0f);

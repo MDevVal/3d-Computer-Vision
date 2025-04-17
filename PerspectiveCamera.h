@@ -27,12 +27,12 @@ public:
             float lineWidth = 3.0f) const override;
   QMatrix4x4 getPose();
   QVector4D center;
-
-private:
   QMatrix4x4 pose;
   QVector2D imagePrincipalPoint;
   float imagePlaneSize;
   float imagePlaneDistance;
+
+private:
   QMatrix4x4 transformationMatrix;
 
   void calculateTransformationMatrix();
