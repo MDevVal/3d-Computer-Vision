@@ -51,11 +51,10 @@ GLWidget::GLWidget(QWidget *parent)
     sceneManager.push_back(new Hexahedron(QVector4D(4, 4, 40, 1), 8, 8, 8));
     sceneManager.push_back(new Hexahedron(QVector4D(2, 2, 20, 1), 2, 2, 2));
     sceneManager.push_back(new Hexahedron(QVector4D(1, 1, 10, 1), 0.5, 0.5, 0.5));
-
-    sceneManager.push_back(new StereoCamera(/* baseline */ 5.0f,
-                                            /* half‑plane size */ 2.0f,
-                                            /* focal length  */ 4.0f,
-                                            /* principal pt  */ {0, 0}));
+    sceneManager.push_back(new StereoCamera(/* baseline */ 4.f,
+                                          /* half‑plane size */ 2.0f,
+                                          /* focal length  */ 4.0f,
+                                          /* principal pt  */ {0, 0}));
 
     // TODO: Assignement 1, Part 2
     //       Add here your own new scene
