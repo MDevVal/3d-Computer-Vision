@@ -27,17 +27,6 @@ public:
   float focal() const noexcept { return f; }
   QVector2D pp() const noexcept { return c; }
 
-  /**
-   * Triangulate a 3‑D point from two *corresponding* image points that fulfil
-   * the normal‑case constraint y₁ = y₂.  Coordinates are given in *pixel space*
-   * (origin at the principal point).
-   *
-   * Formulae (lecture slide 22)
-   * :contentReference[oaicite:0]{index=0}&#8203;:contentReference[oaicite:1]{index=1}
-   *      Z = −f·B / (x₁ − x₂)      X = −Z·x₁ / f      Y = −Z·y / f
-   */
-  QVector3D triangulate(const QVector2D &pLeft, const QVector2D &pRight) const;
-
   void draw(const RenderCamera &renderer,
             const QColor &colour = QColorConstants::White,
             float lineWidth = 2.0f) const override {

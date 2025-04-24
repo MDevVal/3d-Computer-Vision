@@ -49,7 +49,7 @@ GLWidget::GLWidget(QWidget *parent) : QOpenGLWidget(parent), pointSize(5) {
   sceneManager.push_back(new Hexahedron(QVector4D(2, 2, 20, 1), 2, 2, 2));
   sceneManager.push_back(new Hexahedron(QVector4D(1, 1, 10, 1), 0.5, 0.5, 0.5));
 
-  sceneManager.push_back(new StereoCamera(/* baseline */ 0.1f,
+  sceneManager.push_back(new StereoCamera(/* baseline */ 4.f,
                                           /* half‑plane size */ 2.0f,
                                           /* focal length  */ 4.0f,
                                           /* principal pt  */ {0, 0}));
