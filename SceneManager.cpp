@@ -45,7 +45,10 @@ void SceneManager::draw(const RenderCamera &renderer,
         obj->draw(renderer, COLOR_CAMERA, 3.0f);
         break;
       case ST_STEREO_CAMERA: {
-
+        // TODO: Assignement 2, Part 1 - 3
+        // Part 1: This is the place to invoke the stereo camera's projection method and draw the projected objects.
+        // Part 2: This is the place to invoke the stereo camera's reconstruction method.
+        // Part 3: This is the place to invoke the stereo camera's reconstruction method using misaligned stereo cameras.
         auto stereo = static_cast<StereoCamera *>(obj);
         obj->draw(renderer, COLOR_CAMERA, 3.0f);
         for (auto toDraw : *this)
