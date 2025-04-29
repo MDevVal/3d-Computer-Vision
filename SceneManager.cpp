@@ -45,60 +45,15 @@ void SceneManager::draw(const RenderCamera &renderer,
         obj->draw(renderer, COLOR_CAMERA, 3.0f);
         break;
       case ST_STEREO_CAMERA: {
+
         auto stereo = static_cast<StereoCamera *>(obj);
-        auto &leftCam = const_cast<PerspectiveCamera &>(stereo->leftCamera());
-        auto &rightCam = const_cast<PerspectiveCamera &>(stereo->rightCamera());
-
-        for (auto toDraw : *this) {
-          if (toDraw->getType() == ST_HEXAHEDRON) {
-            auto hex = static_cast<Hexahedron *>(toDraw);
-            PerspectiveCamera::drawHexahedron(leftCam, renderer, *hex,
-                                              QColorConstants::Green, 1.0f);
-            PerspectiveCamera::drawHexahedron(rightCam, renderer, *hex,
-                                              QColorConstants::Blue, 1.0f);
-          }
-        }
-
-        std::vector<Hexahedron> reconstruction;
-        std::size_t n =
-            std::min(leftCam.planarHex.size(), rightCam.planarHex.size());
-
-        const float B = stereo->baseline();
-        const float f = leftCam.imagePlaneDistance;
-        const float k1 = 0.05f;
-
-        for (std::size_t h = 0; h < n; ++h) {
-          const Hexahedron &hexL = leftCam.planarHex[h];
-          const Hexahedron &hexR = rightCam.planarHex[h];
-          Hexahedron hexRec;
-          hexRec.clear();
-
-          for (std::size_t k = 0; k < hexL.size(); ++k) {
-            QVector3D pL = hexL[k];
-            QVector3D pR = hexR[k];
-
-            float disparity = pL.x() - pR.x();
-            if (std::abs(disparity) < 1e-6f)
-              disparity = 1e-6f;
-
-            float z = f * B / disparity;
-            float x = z * pL.x() / f + B * 0.5f;
-            float y = z * pL.y() / f;
-
-            float r2 = (pL.x() * pL.x() + pL.y() * pL.y()) / (f * f);
-            float d = 1.0f + k1 * r2;
-            x *= d;
-            y *= d;
-
-            hexRec.push_back(QVector3D(x, y, z));
-          }
-          reconstruction.push_back(hexRec);
-        }
-
-        for (auto &hex : reconstruction)
-          hex.draw(renderer, QColorConstants::Red, 1.0f);
-
         obj->draw(renderer, COLOR_CAMERA, 3.0f);
+        for (auto toDraw : *this)
+          if (toDraw->getType() == ST_HEXAHEDRON)
+            stereo->projectHexahedron(
+                renderer, *dynamic_cast<Hexahedron *>(toDraw), 1.0f,
+                QColorConstants::Green, QColorConstants::Cyan);
+        stereo->reconstruct(renderer, QColorConstants::Red, 4.0f);
         break;
       }
       }

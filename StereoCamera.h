@@ -13,12 +13,26 @@ public:
         right(QVector4D(baseline, 0.0f, 0.0f, 1.0f), identityPose(),
               imagePlaneSize, focalLength, principalPoint) {
     type = SceneObjectType::ST_STEREO_CAMERA;
+
+    QMatrix4x4 rot;
+    rot.setToIdentity();
+    rot.rotate(10.0f, QVector3D(0, 1, 0));
+    left.pose = rot * left.pose;
+    left.updateCamera();
+    right.updateCamera();
   }
 
   void update() {
     left.updateCamera();
     right.updateCamera();
   }
+
+  void projectHexahedron(const RenderCamera &renderer, const Hexahedron &hex,
+                         float lineWidth, const QColor &leftColor,
+                         const QColor &rightColor);
+
+  void reconstruct(const RenderCamera &renderer, const QColor &color,
+                   float lineWidth);
 
   const PerspectiveCamera &leftCamera() const noexcept { return left; }
   const PerspectiveCamera &rightCamera() const noexcept { return right; }
