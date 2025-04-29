@@ -2,9 +2,8 @@
 #include <cmath>
 #include <limits>
 
-QMatrix4x4 StereoCamera::identityPose()
-{
-    QMatrix4x4 pose;
-    pose.setToIdentity();
-    return pose;
+QMatrix4x4 StereoCamera::identityPose() {
+  QMatrix4x4 pose;
+  pose.setToIdentity();
+  return pose;
 }
