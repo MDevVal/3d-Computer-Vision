@@ -105,15 +105,14 @@ void PerspectiveCamera::draw(const RenderCamera &renderer, const QColor &color,
 
   QVector3D ipp3d =
       QVector3D(center) + imagePlaneDistance * QVector3D(pose.column(2));
-  renderer.renderLine(ipp3d,
-                      (ipp3d + 0.5f * QVector3D(pose.column(0))).toVector4D(),
+
+  renderer.renderLine(ipp3d, (ipp3d + 0.5f * QVector3D(pose.column(0))),
                       QColorConstants::Red, 4.0f);
-  renderer.renderLine(ipp3d,
-                      (ipp3d + 0.5f * QVector3D(pose.column(1))).toVector4D(),
+  renderer.renderLine(ipp3d, (ipp3d + 0.5f * QVector3D(pose.column(1))),
                       QColorConstants::Blue, 4.0f);
-  renderer.renderLine(
-      center, (QVector3D(center) + QVector3D(pose.column(2))).toVector4D(),
-      QColorConstants::White, 4.0f);
+  renderer.renderLine(center.toVector3D(),
+                      (QVector3D(center) + QVector3D(pose.column(2))),
+                      QColorConstants::White, 4.0f);
 }
 
 QMatrix4x4 PerspectiveCamera::getPose() { return pose; }
