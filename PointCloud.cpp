@@ -4,9 +4,9 @@
 #include "PointCloud.h"
 
 #include <fstream>
-#include <sstream>
 #include <iostream>
 #include <math.h>
+#include <sstream>
 
 #include "GLConvenience.h"
 #include "QtConvenience.h"
@@ -15,14 +15,13 @@ using namespace std;
 
 PointCloud::PointCloud()
 {
-    type      = SceneObjectType::ST_POINT_CLOUD;
+    type = SceneObjectType::ST_POINT_CLOUD;
     pointSize = 3.0f;
 }
 
-PointCloud::~PointCloud()
-{}
+PointCloud::~PointCloud() {}
 
-bool PointCloud::loadPLY(const QString& filePath)
+bool PointCloud::loadPLY(const QString &filePath)
 {
     // open stream
     fstream is;
@@ -31,7 +30,8 @@ bool PointCloud::loadPLY(const QString& filePath)
     // ensure format with magic header
     string line;
     getline(is, line);
-    if (line != "ply") throw runtime_error("not a ply file");
+    if (line != "ply")
+        throw runtime_error("not a ply file");
 
     // parse header looking only for 'element vertex' section size
     unsigned pointsCount = 0;
@@ -53,7 +53,7 @@ bool PointCloud::loadPLY(const QString& filePath)
     if (pointsCount > 0) {
         this->resize(pointsCount);
         float m = float(INT_MAX);
-        pointsBoundMin = QVector3D(m,m,m);
+        pointsBoundMin = QVector3D(m, m, m);
         pointsBoundMax = -pointsBoundMin;
 
         stringstream ss;
@@ -77,19 +77,23 @@ bool PointCloud::loadPLY(const QString& filePath)
         }
 
         // basic validation
-        if (p - this->data() < size()) throw runtime_error("broken ply file");
+        if (p - this->data() < size())
+            throw runtime_error("broken ply file");
 
         cout << "number of points: " + to_string(pointsCount) << endl;
 
         // rescale data
-        float a,s=0;
-        for (int i=0; i<3;i++) {
-            a = pointsBoundMax[i]-pointsBoundMin[i];
-            s+= a*a;
+        float a, s = 0;
+        for (int i = 0; i < 3; i++) {
+            a = pointsBoundMax[i] - pointsBoundMin[i];
+            s += a * a;
         }
-        s = sqrt(s)/pointCloudScale;
-        for (auto& p: *this) { p /= s; p[3]=1.0; }
-      //  for (int i=0; i < size(); i++) { (*this)[i]/=s; (*this)[i][3] = 1.0; }
+        s = sqrt(s) / pointCloudScale;
+        for (auto &p : *this) {
+            p /= s;
+            p[3] = 1.0;
+        }
+        //  for (int i=0; i < size(); i++) { (*this)[i]/=s; (*this)[i][3] = 1.0; }
     }
     return true;
 }
@@ -99,12 +103,13 @@ void PointCloud::setPointSize(unsigned _pointSize)
     pointSize = _pointSize;
 }
 
-void PointCloud::affineMap(const QMatrix4x4& M)
+void PointCloud::affineMap(const QMatrix4x4 &M)
 {
-    for (auto& p: *this) p=M.map(p);
+    for (auto &p : *this)
+        p = M.map(p);
 }
 
-void PointCloud::draw(const RenderCamera& camera, const QColor& color, float ) const
+void PointCloud::draw(const RenderCamera &camera, const QColor &color, float) const
 {
-    camera.renderPCL((*this),color,pointSize);
+    camera.renderPCL((*this), color, pointSize);
 }

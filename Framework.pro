@@ -4,7 +4,8 @@
 
 TEMPLATE = app
 TARGET = Framework
-QT += core opengl widgets gui
+QT += core opengl widgets gui openglwidgets
+LIBS += -lopengl32 -lglu32
 CONFIG += debug
 DEFINES += QT_DLL QT_OPENGL_LIB QT_WIDGETS_LIB
 INCLUDEPATH += ./GeneratedFiles \
