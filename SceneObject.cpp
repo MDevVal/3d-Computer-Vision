@@ -4,6 +4,4 @@
 // (c) Georg Umlauf, 2021
 //
 
-
 // Nothing to do here, yet...
-
