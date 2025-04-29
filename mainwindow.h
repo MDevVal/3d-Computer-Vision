@@ -3,20 +3,19 @@
 //
 #pragma once
 
-#include <QtWidgets/QMainWindow>
 #include "ui_mainwindow.h"
+#include <QtWidgets/QMainWindow>
 
-class MainWindow : public QMainWindow
-{
-	Q_OBJECT
+class MainWindow : public QMainWindow {
+  Q_OBJECT
 
 public:
-    MainWindow(QWidget *parent = nullptr);
-    ~MainWindow() override;
+  MainWindow(QWidget *parent = nullptr);
+  ~MainWindow() override;
 
 protected slots:
-    void updatePointSize(int);
+  void updatePointSize(int);
 
 private:
-    Ui::MainWindowClass* ui;
+  Ui::MainWindowClass *ui;
 };
