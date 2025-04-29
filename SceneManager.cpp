@@ -11,7 +11,6 @@ using enum SceneObjectType;
 //
 // iterates all objects under its control and has them drawn by the renderer
 //
-
 void SceneManager::draw(const RenderCamera &renderer,
                         const QColor &color) const {
   for (auto obj : *this)
