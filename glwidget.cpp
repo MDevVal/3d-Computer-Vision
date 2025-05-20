@@ -37,7 +37,6 @@ GLWidget::GLWidget(QWidget *parent)
   // mouse-move reactions
   setMouseTracking(true);
 
-  // setup render camera and connect its signals
   renderer = new RenderCamera();
   renderer->reset();
   connect(renderer, &RenderCamera::changed, this, &GLWidget::onRendererChanged);
@@ -58,7 +57,12 @@ GLWidget::GLWidget(QWidget *parent)
   //                                         /* principal pt  */ {0, 0}));
 
   auto *pcl = new PointCloud;
+#ifdef WIN32
+  pcl->loadPLY("../data/bunny.ply");
+#else
   pcl->loadPLY("../data/bunny.unix.ply");
+#endif
+
   sceneManager.push_back(pcl);
 
   auto *kd = new KdTree(*pcl);
