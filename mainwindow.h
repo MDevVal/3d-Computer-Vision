@@ -15,6 +15,7 @@ public:
 
 protected slots:
   void updatePointSize(int);
+  void updateKdDepth(int);
 
 private:
   Ui::MainWindowClass *ui;

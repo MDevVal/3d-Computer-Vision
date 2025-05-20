@@ -66,7 +66,8 @@ SOURCES       = glwidget.cpp \
 		SceneManager.cpp \
 		SceneObject.cpp \
 		PerspectiveCamera.cpp \
-		StereoCamera.cpp GeneratedFiles/debug/moc_glwidget.cpp \
+		StereoCamera.cpp \
+		KdTree.cpp GeneratedFiles/debug/moc_glwidget.cpp \
 		GeneratedFiles/debug/moc_mainwindow.cpp \
 		GeneratedFiles/debug/moc_RenderCamera.cpp
 OBJECTS       = debug/glwidget.o \
@@ -84,6 +85,7 @@ OBJECTS       = debug/glwidget.o \
 		debug/SceneObject.o \
 		debug/PerspectiveCamera.o \
 		debug/StereoCamera.o \
+		debug/KdTree.o \
 		debug/moc_glwidget.o \
 		debug/moc_mainwindow.o \
 		debug/moc_RenderCamera.o
@@ -224,7 +226,8 @@ DIST          = /usr/lib/qt/mkspecs/features/spec_pre.prf \
 		SceneManager.h \
 		SceneObject.h \
 		PerspectiveCamera.h \
-		StereoCamera.h glwidget.cpp \
+		StereoCamera.h \
+		KdTree.h glwidget.cpp \
 		mainwindow.cpp \
 		main.cpp \
 		PointCloud.cpp \
@@ -238,7 +241,8 @@ DIST          = /usr/lib/qt/mkspecs/features/spec_pre.prf \
 		SceneManager.cpp \
 		SceneObject.cpp \
 		PerspectiveCamera.cpp \
-		StereoCamera.cpp
+		StereoCamera.cpp \
+		KdTree.cpp
 QMAKE_TARGET  = Framework
 DESTDIR       = 
 TARGET        = Framework
@@ -516,8 +520,8 @@ distdir: FORCE
 	@test -d $(DISTDIR) || mkdir -p $(DISTDIR)
 	$(COPY_FILE) --parents $(DIST) $(DISTDIR)/
 	$(COPY_FILE) --parents /usr/lib/qt/mkspecs/features/data/dummy.cpp $(DISTDIR)/
-	$(COPY_FILE) --parents glwidget.h mainwindow.h PointCloud.h GLConvenience.h QtConvenience.h Axes.h Cube.h Hexahedron.h Plane.h RenderCamera.h SceneManager.h SceneObject.h PerspectiveCamera.h StereoCamera.h $(DISTDIR)/
-	$(COPY_FILE) --parents glwidget.cpp mainwindow.cpp main.cpp PointCloud.cpp GLConvenience.cpp QtConvenience.cpp Axes.cpp Cube.cpp Hexahedron.cpp Plane.cpp RenderCamera.cpp SceneManager.cpp SceneObject.cpp PerspectiveCamera.cpp StereoCamera.cpp $(DISTDIR)/
+	$(COPY_FILE) --parents glwidget.h mainwindow.h PointCloud.h GLConvenience.h QtConvenience.h Axes.h Cube.h Hexahedron.h Plane.h RenderCamera.h SceneManager.h SceneObject.h PerspectiveCamera.h StereoCamera.h KdTree.h $(DISTDIR)/
+	$(COPY_FILE) --parents glwidget.cpp mainwindow.cpp main.cpp PointCloud.cpp GLConvenience.cpp QtConvenience.cpp Axes.cpp Cube.cpp Hexahedron.cpp Plane.cpp RenderCamera.cpp SceneManager.cpp SceneObject.cpp PerspectiveCamera.cpp StereoCamera.cpp KdTree.cpp $(DISTDIR)/
 	$(COPY_FILE) --parents mainwindow.ui $(DISTDIR)/
 
 
@@ -558,8 +562,8 @@ GeneratedFiles/debug/moc_glwidget.cpp: glwidget.h \
 		SceneManager.h \
 		PerspectiveCamera.h \
 		Hexahedron.h \
-		SceneObject.h \
 		Axes.h \
+		SceneObject.h \
 		GeneratedFiles/debug/moc_predefs.h \
 		/usr/bin/moc
 	/usr/bin/moc $(DEFINES) --include /home/benni/School/3DCV/Framework/GeneratedFiles/debug/moc_predefs.h -I/usr/lib/qt/mkspecs/linux-g++ -I/home/benni/School/3DCV/Framework -I/home/benni/School/3DCV/Framework/GeneratedFiles -I/home/benni/School/3DCV/Framework -I/home/benni/School/3DCV/Framework/GeneratedFiles/Debug -I/home/benni/School/3DCV/Framework/external/eigen-3.4.0 -I/usr/include/qt -I/usr/include/qt/QtOpenGL -I/usr/include/qt/QtWidgets -I/usr/include/qt/QtGui -I/usr/include/qt/QtCore -I/usr/include/c++/14.2.1 -I/usr/include/c++/14.2.1/x86_64-pc-linux-gnu -I/usr/include/c++/14.2.1/backward -I/usr/lib/gcc/x86_64-pc-linux-gnu/14.2.1/include -I/usr/local/include -I/usr/lib/gcc/x86_64-pc-linux-gnu/14.2.1/include-fixed -I/usr/include glwidget.h -o GeneratedFiles/debug/moc_glwidget.cpp
@@ -589,8 +593,8 @@ GeneratedFiles/ui_mainwindow.h: mainwindow.ui \
 		SceneManager.h \
 		PerspectiveCamera.h \
 		Hexahedron.h \
-		SceneObject.h \
-		Axes.h
+		Axes.h \
+		SceneObject.h
 	/usr/bin/uic mainwindow.ui -o GeneratedFiles/ui_mainwindow.h
 
 compiler_yacc_decl_make_all:
@@ -608,10 +612,11 @@ debug/glwidget.o: glwidget.cpp glwidget.h \
 		SceneManager.h \
 		PerspectiveCamera.h \
 		Hexahedron.h \
-		SceneObject.h \
 		Axes.h \
-		StereoCamera.h \
-		PointCloud.h
+		SceneObject.h \
+		KdTree.h \
+		PointCloud.h \
+		StereoCamera.h
 	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o debug/glwidget.o glwidget.cpp
 
 debug/mainwindow.o: mainwindow.cpp mainwindow.h \
@@ -623,8 +628,8 @@ debug/main.o: main.cpp mainwindow.h \
 	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o debug/main.o main.cpp
 
 debug/PointCloud.o: PointCloud.cpp PointCloud.h \
-		SceneObject.h \
 		RenderCamera.h \
+		SceneObject.h \
 		GLConvenience.h \
 		QtConvenience.h
 	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o debug/PointCloud.o PointCloud.cpp
@@ -642,23 +647,23 @@ debug/Axes.o: Axes.cpp Axes.h \
 
 debug/Cube.o: Cube.cpp Cube.h \
 		Hexahedron.h \
+		Axes.h \
 		SceneObject.h \
 		RenderCamera.h \
-		Axes.h \
 		GLConvenience.h
 	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o debug/Cube.o Cube.cpp
 
 debug/Hexahedron.o: Hexahedron.cpp Hexahedron.h \
+		Axes.h \
 		SceneObject.h \
 		RenderCamera.h \
-		Axes.h \
 		QtConvenience.h
 	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o debug/Hexahedron.o Hexahedron.cpp
 
 debug/Plane.o: Plane.cpp Plane.h \
+		Axes.h \
 		SceneObject.h \
 		RenderCamera.h \
-		Axes.h \
 		GLConvenience.h \
 		QtConvenience.h
 	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o debug/Plane.o Plane.cpp
@@ -671,9 +676,9 @@ debug/RenderCamera.o: RenderCamera.cpp RenderCamera.h \
 debug/SceneManager.o: SceneManager.cpp SceneManager.h \
 		PerspectiveCamera.h \
 		Hexahedron.h \
+		Axes.h \
 		SceneObject.h \
 		RenderCamera.h \
-		Axes.h \
 		StereoCamera.h
 	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o debug/SceneManager.o SceneManager.cpp
 
@@ -682,18 +687,24 @@ debug/SceneObject.o: SceneObject.cpp
 
 debug/PerspectiveCamera.o: PerspectiveCamera.cpp PerspectiveCamera.h \
 		Hexahedron.h \
+		Axes.h \
 		SceneObject.h \
-		RenderCamera.h \
-		Axes.h
+		RenderCamera.h
 	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o debug/PerspectiveCamera.o PerspectiveCamera.cpp
 
 debug/StereoCamera.o: StereoCamera.cpp StereoCamera.h \
 		PerspectiveCamera.h \
 		Hexahedron.h \
+		Axes.h \
 		SceneObject.h \
-		RenderCamera.h \
-		Axes.h
+		RenderCamera.h
 	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o debug/StereoCamera.o StereoCamera.cpp
+
+debug/KdTree.o: KdTree.cpp KdTree.h \
+		PointCloud.h \
+		RenderCamera.h \
+		SceneObject.h
+	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o debug/KdTree.o KdTree.cpp
 
 debug/moc_glwidget.o: GeneratedFiles/debug/moc_glwidget.cpp 
 	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o debug/moc_glwidget.o GeneratedFiles/debug/moc_glwidget.cpp

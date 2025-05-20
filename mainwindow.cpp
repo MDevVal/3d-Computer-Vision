@@ -12,16 +12,17 @@ MainWindow::MainWindow(QWidget *parent)
   ui->glwidget->setFocusPolicy(Qt::StrongFocus);
   ui->glwidget->setFocus();
 
-  connect(ui->pushButton, &QPushButton ::clicked, ui->glwidget,
-          &GLWidget ::openFileDialog);
-  connect(ui->radioButton_1, &QRadioButton::clicked, ui->glwidget,
-          &GLWidget ::radioButtonClicked);
-  connect(ui->radioButton_2, &QRadioButton::clicked, ui->glwidget,
-          &GLWidget ::radioButtonClicked);
-  connect(ui->horizontalSlider, &QSlider ::valueChanged, this,
+  connect(ui->pushButton, &QPushButton::clicked, ui->glwidget,
+          &GLWidget::openFileDialog);
+
+  connect(ui->horizontalSlider, &QSlider::valueChanged, this,
           &MainWindow::updatePointSize);
 
+  connect(ui->horizontalSliderDepth, &QSlider::valueChanged, this,
+          &MainWindow::updateKdDepth);
+
   updatePointSize(3);
+  updateKdDepth(3);
 }
 
 MainWindow::~MainWindow() { delete ui; }
@@ -29,4 +30,9 @@ MainWindow::~MainWindow() { delete ui; }
 void MainWindow::updatePointSize(int value) {
   std::cout << "new pointsize: " << value << std::endl;
   ui->glwidget->setPointSize(value);
+}
+
+void MainWindow::updateKdDepth(int value) {
+  std::cout << "new kd-depth: " << value << std::endl;
+  ui->glwidget->setKdDepth(value);
 }

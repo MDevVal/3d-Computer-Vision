@@ -3,6 +3,7 @@
 // (c) Georg Umlauf, 2021+2022+2024
 //
 #include "glwidget.h"
+#include "KdTree.h"
 #include "StereoCamera.h"
 #include <QtGui>
 
@@ -30,7 +31,8 @@
 using namespace std;
 using namespace Qt;
 
-GLWidget::GLWidget(QWidget *parent) : QOpenGLWidget(parent), pointSize(5) {
+GLWidget::GLWidget(QWidget *parent)
+    : QOpenGLWidget(parent), pointSize(5), kdDepth(3) {
   // enable mouse-events, even if no mouse-button is pressed -> yields smoother
   // mouse-move reactions
   setMouseTracking(true);
@@ -45,14 +47,22 @@ GLWidget::GLWidget(QWidget *parent) : QOpenGLWidget(parent), pointSize(5) {
 
   // sceneManager.push_back(new Axes());
 
-  sceneManager.push_back(new Hexahedron(QVector4D(4, 4, 40, 1), 8, 8, 8));
-  sceneManager.push_back(new Hexahedron(QVector4D(2, 2, 20, 1), 2, 2, 2));
-  sceneManager.push_back(new Hexahedron(QVector4D(1, 1, 10, 1), 0.5, 0.5, 0.5));
+  // sceneManager.push_back(new Hexahedron(QVector4D(4, 4, 40, 1), 8, 8, 8));
+  // sceneManager.push_back(new Hexahedron(QVector4D(2, 2, 20, 1), 2, 2, 2));
+  // sceneManager.push_back(new Hexahedron(QVector4D(1, 1, 10, 1), 0.5, 0.5,
+  // 0.5));
+  //
+  // sceneManager.push_back(new StereoCamera(/* baseline */ 2.f,
+  //                                         /* half‑plane size */ 2.0f,
+  //                                         /* focal length  */ 4.0f,
+  //                                         /* principal pt  */ {0, 0}));
 
-  sceneManager.push_back(new StereoCamera(/* baseline */ 2.f,
-                                          /* half‑plane size */ 2.0f,
-                                          /* focal length  */ 4.0f,
-                                          /* principal pt  */ {0, 0}));
+  auto *pcl = new PointCloud;
+  pcl->loadPLY("../data/bunny.unix.ply");
+  sceneManager.push_back(pcl);
+
+  auto *kd = new KdTree(*pcl);
+  sceneManager.push_back(kd);
 
   // TODO: Assignement 1, Part 2
   //       Add here your own new scene
@@ -277,7 +287,15 @@ void GLWidget::setPointSize(int size) {
   update();
 }
 
-//
+void GLWidget::setKdDepth(int depth) {
+  assert(depth > 0);
+  kdDepth = depth;
+  for (auto s : sceneManager)
+    if (s->getType() == SceneObjectType::ST_KD_TREE)
+      reinterpret_cast<KdTree *>(s)->setVisualDepth(kdDepth);
+  update();
+}
+
 // 1. reacts on push button click
 // 2. opens file dialog
 // 3. loads ply-file data to new point cloud

@@ -16,6 +16,7 @@ class GLWidget : public QOpenGLWidget {
 private:
   // scene and scene control
   int pointSize;
+  int kdDepth;
   SceneManager sceneManager;
 
 public:
@@ -29,6 +30,7 @@ public slots:
   void checkBoxClicked();        // handle check boxes
   void spinBoxValueChanged(int); // handles spin  boxes changes
   void setPointSize(int);
+  void setKdDepth(int depth);
 
 protected:
   // painting the canvas

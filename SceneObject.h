@@ -12,7 +12,6 @@
 #include <QColor>
 #include <QMatrix4x4>
 
-// some predefined colors
 [[maybe_unused]] const QColor COLOR_AXES = QColor(255, 0, 0);
 [[maybe_unused]] const QColor COLOR_PLANE = QColor(255, 255, 0);
 [[maybe_unused]] const QColor COLOR_SCENE = QColor(0, 255, 0);
@@ -30,7 +29,8 @@ enum class SceneObjectType {
   ST_PERSPECTIVE_CAMERA [[maybe_unused]], // perspective camera
   ST_STEREO_CAMERA [[maybe_unused]],      // stereo cameras
   ST_POINT_CLOUD [[maybe_unused]],        // point cloud
-  ST_MaxSceneType [[maybe_unused]]
+  ST_MaxSceneType [[maybe_unused]],
+  ST_KD_TREE [[maybe_unused]],
 };
 
 class SceneObject {
