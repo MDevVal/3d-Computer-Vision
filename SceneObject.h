@@ -31,6 +31,7 @@ enum class SceneObjectType {
   ST_POINT_CLOUD [[maybe_unused]],        // point cloud
   ST_MaxSceneType [[maybe_unused]],
   ST_KD_TREE [[maybe_unused]],
+  ST_OCT_TREE [[maybe_unused]],
 };
 
 class SceneObject {

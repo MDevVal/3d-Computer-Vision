@@ -36,7 +36,8 @@ HEADERS += ./glwidget.h \
     SceneObject.h \
     PerspectiveCamera.h \
     StereoCamera.h \
-    KdTree.h
+    KdTree.h \
+    OctTree.h
 
 SOURCES += ./glwidget.cpp \
      ./mainwindow.cpp \
@@ -53,6 +54,7 @@ SOURCES += ./glwidget.cpp \
     SceneObject.cpp \
     PerspectiveCamera.cpp \
     StereoCamera.cpp \
-    KdTree.cpp
+    KdTree.cpp \
+    OctTree.cpp
 
 FORMS += ./mainwindow.ui

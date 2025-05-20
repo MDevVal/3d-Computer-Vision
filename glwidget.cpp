@@ -4,6 +4,7 @@
 //
 #include "glwidget.h"
 #include "KdTree.h"
+#include "OctTree.h"
 #include "StereoCamera.h"
 #include <QtGui>
 
@@ -65,10 +66,12 @@ GLWidget::GLWidget(QWidget *parent)
 
   sceneManager.push_back(pcl);
 
-  auto *kd = new KdTree(*pcl);
-  sceneManager.push_back(kd);
+  // auto *kd = new KdTree(*pcl);
+  // sceneManager.push_back(kd);
 
-  // TODO: Assignement 1, Part 2
+  auto *oct = new OctTree(*pcl, 10, 20, 3);
+  sceneManager.push_back(oct);
+
   //       Add here your own new scene
   //       object that represents a
   //       perspective camera. Its

@@ -44,6 +44,9 @@ void SceneManager::draw(const RenderCamera &renderer,
         }
         obj->draw(renderer, COLOR_CAMERA, 3.0f);
         break;
+      case ST_OCT_TREE:
+        obj->draw(renderer, QColorConstants::Cyan, 1.5f);
+        break;
       case ST_KD_TREE:
         obj->draw(renderer, QColorConstants::Yellow, 1.5f);
         break;
