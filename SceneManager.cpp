@@ -5,7 +5,10 @@
 //
 
 #include "SceneManager.h"
+#include "PointCloud.h"
 #include "StereoCamera.h"
+#include <Eigen/Dense>
+#include <cmath>
 
 using enum SceneObjectType;
 //
@@ -26,24 +29,33 @@ void SceneManager::draw(const RenderCamera &renderer,
       case ST_HEXAHEDRON:
         obj->draw(renderer, color, 2.0f);
         break;
-      case ST_POINT_CLOUD:
-        obj->draw(renderer, COLOR_POINT_CLOUD, 3.0f); // last argument unused
+      case ST_POINT_CLOUD: {
+        obj->draw(renderer, COLOR_POINT_CLOUD, 3.0f);
+
+        auto *pc = static_cast<PointCloud *>(obj);
+        Eigen::Vector3f centroid;
+        Eigen::Matrix3f EV;
+        Eigen::Vector3f L;
+        pc->computePCA(centroid, EV, L);
+
+        QVector3D c(centroid.x(), centroid.y(), centroid.z());
+        float scale = 1.5f * std::sqrt(L.maxCoeff());
+
+        renderer.renderLine(
+            c.toVector4D(),
+            (c + scale * QVector3D(EV(0, 2), EV(1, 2), EV(2, 2))).toVector4D(),
+            QColorConstants::Red, 4.0f); // major
+        renderer.renderLine(
+            c.toVector4D(),
+            (c + scale * QVector3D(EV(0, 1), EV(1, 1), EV(2, 1))).toVector4D(),
+            QColorConstants::Green, 3.0f); // 2nd
+        renderer.renderLine(
+            c.toVector4D(),
+            (c + scale * QVector3D(EV(0, 0), EV(1, 0), EV(2, 0))).toVector4D(),
+            QColorConstants::Blue, 2.0f); // minor
+
         break;
-      case ST_PERSPECTIVE_CAMERA:
-        // TODO: Assignement 1, Part 3
-        // This is the place to invoke the perspective camera's projection
-        // method and draw the projected objects.
-        for (auto toDraw : *this) {
-          switch (toDraw->getType()) {
-          case SceneObjectType::ST_HEXAHEDRON:
-            PerspectiveCamera::drawHexahedron(
-                *dynamic_cast<PerspectiveCamera *>(obj), renderer,
-                *dynamic_cast<Hexahedron *>(toDraw), QColorConstants::Green,
-                1.0f);
-          }
-        }
-        obj->draw(renderer, COLOR_CAMERA, 3.0f);
-        break;
+      }
       case ST_OCT_TREE:
         obj->draw(renderer, QColorConstants::Cyan, 1.5f);
         break;

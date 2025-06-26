@@ -45,7 +45,7 @@ GLWidget::GLWidget(QWidget *parent)
   // TODO: Assignment 1, Part 1
   //       Add here your own new 3d scene objects, e.g. cubes, hexahedra, etc.,
 
-  // sceneManager.push_back(new Axes());
+  sceneManager.push_back(new Axes());
 
   // sceneManager.push_back(new Hexahedron(QVector4D(4, 4, 40, 1), 8, 8, 8));
   // sceneManager.push_back(new Hexahedron(QVector4D(2, 2, 20, 1), 2, 2, 2));
@@ -64,13 +64,17 @@ GLWidget::GLWidget(QWidget *parent)
   pcl->loadPLY("../data/bunny.unix.ply");
 #endif
 
+  QMatrix4x4 R;
+  R.setToIdentity();
+  R.rotate(45.0f, QVector3D(0, 0, 1));
+  pcl->affineMap(R);
   sceneManager.push_back(pcl);
 
   // auto *kd = new KdTree(*pcl);
   // sceneManager.push_back(kd);
 
-  auto *oct = new OctTree(*pcl, 10, 20, 3);
-  sceneManager.push_back(oct);
+  // auto *oct = new OctTree(*pcl, 10, 20, 3);
+  // sceneManager.push_back(oct);
 
   //       Add here your own new scene
   //       object that represents a

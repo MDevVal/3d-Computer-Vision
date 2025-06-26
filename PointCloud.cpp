@@ -107,3 +107,28 @@ void PointCloud::draw(const RenderCamera &camera, const QColor &color,
                       float) const {
   camera.renderPCL((*this), color, pointSize);
 }
+
+void PointCloud::computePCA(Eigen::Vector3f &c, Eigen::Matrix3f &R,
+                            Eigen::Vector3f &L) const {
+  const std::size_t n = size();
+  if (n == 0)
+    return;
+
+  c.setZero();
+  for (const auto &p : *this)
+    c += Eigen::Vector3f(p.x(), p.y(), p.z());
+  c /= float(n);
+
+  Eigen::Matrix3f C;
+  C.setZero();
+  for (const auto &p : *this) {
+    Eigen::Vector3f q(p.x(), p.y(), p.z());
+    q -= c;
+    C += q * q.transpose();
+  }
+  C /= float(n);
+
+  Eigen::SelfAdjointEigenSolver<Eigen::Matrix3f> es(C);
+  R = es.eigenvectors();
+  L = es.eigenvalues();
+}
