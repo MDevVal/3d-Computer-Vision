@@ -7,6 +7,7 @@
 #include "SceneManager.h"
 #include "PointCloud.h"
 #include "StereoCamera.h"
+#include "stdio.h"
 #include <Eigen/Dense>
 #include <cmath>
 
@@ -33,27 +34,28 @@ void SceneManager::draw(const RenderCamera &renderer,
         obj->draw(renderer, COLOR_POINT_CLOUD, 3.0f);
 
         auto *pc = static_cast<PointCloud *>(obj);
-        Eigen::Vector3f centroid;
-        Eigen::Matrix3f EV;
-        Eigen::Vector3f L;
-        pc->computePCA(centroid, EV, L);
+        const Eigen::Vector3f &c = pc->centroid();
+        const Eigen::Matrix3f &EV = pc->eigenVectors();
+        const Eigen::Vector3f &L = pc->eigenValues();
 
-        QVector3D c(centroid.x(), centroid.y(), centroid.z());
+        QVector3D center(c.x(), c.y(), c.z());
         float scale = 1.5f * std::sqrt(L.maxCoeff());
 
         renderer.renderLine(
-            c.toVector4D(),
-            (c + scale * QVector3D(EV(0, 2), EV(1, 2), EV(2, 2))).toVector4D(),
-            QColorConstants::Red, 4.0f); // major
+            center.toVector4D(),
+            (center + scale * QVector3D(EV(0, 2), EV(1, 2), EV(2, 2)))
+                .toVector4D(),
+            QColorConstants::Red, 4.0f);
         renderer.renderLine(
-            c.toVector4D(),
-            (c + scale * QVector3D(EV(0, 1), EV(1, 1), EV(2, 1))).toVector4D(),
-            QColorConstants::Green, 3.0f); // 2nd
+            center.toVector4D(),
+            (center + scale * QVector3D(EV(0, 1), EV(1, 1), EV(2, 1)))
+                .toVector4D(),
+            QColorConstants::Green, 3.0f);
         renderer.renderLine(
-            c.toVector4D(),
-            (c + scale * QVector3D(EV(0, 0), EV(1, 0), EV(2, 0))).toVector4D(),
-            QColorConstants::Blue, 2.0f); // minor
-
+            center.toVector4D(),
+            (center + scale * QVector3D(EV(0, 0), EV(1, 0), EV(2, 0)))
+                .toVector4D(),
+            QColorConstants::Blue, 2.0f);
         break;
       }
       case ST_OCT_TREE:

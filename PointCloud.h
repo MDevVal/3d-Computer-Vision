@@ -14,6 +14,10 @@ private:
 
   unsigned pointSize = 3;
   const float pointCloudScale = 1.5f;
+  mutable bool pcaValid = false;
+  mutable Eigen::Vector3f pcaCentroid;
+  mutable Eigen::Matrix3f pcaEV;
+  mutable Eigen::Vector3f pcaLambda;
 
 public:
   PointCloud();
@@ -33,4 +37,8 @@ public:
   unsigned getPointSize() const { return pointSize; }
   void computePCA(Eigen::Vector3f &centroid, Eigen::Matrix3f &eigenVectors,
                   Eigen::Vector3f &eigenValues) const;
+
+  const Eigen::Vector3f &centroid() const;
+  const Eigen::Matrix3f &eigenVectors() const;
+  const Eigen::Vector3f &eigenValues() const;
 };

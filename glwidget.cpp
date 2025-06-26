@@ -32,6 +32,15 @@
 using namespace std;
 using namespace Qt;
 
+auto printHomegenousTransform = [](const QMatrix4x4 &M, const char *name) {
+  std::cout << '\n' << name << '\n';
+  for (int r = 0; r < 4; ++r) {
+    for (int c = 0; c < 4; ++c)
+      std::cout << std::setw(12) << std::setprecision(6) << M(r, c) << ' ';
+    std::cout << '\n';
+  }
+};
+
 GLWidget::GLWidget(QWidget *parent)
     : QOpenGLWidget(parent), pointSize(5), kdDepth(3) {
   // enable mouse-events, even if no mouse-button is pressed -> yields smoother
@@ -58,18 +67,61 @@ GLWidget::GLWidget(QWidget *parent)
   //                                         /* principal pt  */ {0, 0}));
 
   auto *pcl = new PointCloud;
+  auto *pcl2 = new PointCloud;
 #ifdef WIN32
-  pcl->loadPLY("../data/bunny.ply");
+  pcl->loadPLY("..\\..\\data\\bunny.ply");
+  pcl2->loadPLY("..\\..\\data\\bunny.ply");
 #else
-  pcl->loadPLY("../data/bunny.unix.ply");
+  pcl->loadPLY("data/bunny.unix.ply");
+  pcl2->loadPLY("data/bunny.unix.ply");
 #endif
 
   QMatrix4x4 R;
   R.setToIdentity();
-  R.rotate(45.0f, QVector3D(0, 0, 1));
-  pcl->affineMap(R);
-  sceneManager.push_back(pcl);
+  // R.rotate(45.0f, QVector3D(0, 0, 1));
+  R.translate(0.0f, 1.0f, 0.0f);
 
+  pcl2->affineMap(R);
+  printHomegenousTransform(R, "R");
+
+  Eigen::Vector3f c1, c2, L;
+  Eigen::Matrix3f V1, V2;
+  pcl->computePCA(c1, V1, L);
+  pcl2->computePCA(c2, V2, L);
+
+  Eigen::Matrix3f R12 = V2.transpose() * V1;
+  Eigen::Vector3f t12 = V2.transpose() * (c1 - c2);
+
+  QMatrix4x4 T12;
+  T12.setToIdentity();
+  for (int i = 0; i < 3; ++i)
+    for (int j = 0; j < 3; ++j)
+      T12(i, j) = R12(i, j);
+  T12(0, 3) = t12.x();
+  T12(1, 3) = t12.y();
+  T12(2, 3) = t12.z();
+
+  printHomegenousTransform(T12, "T ( coordinates in PCA₁  →  PCA₂ )");
+
+  Eigen::Matrix3f Rw = V2 * R12 * V1.transpose(); // 3×3 rotation in world
+  Eigen::Vector3f tw = c2 - Rw * c1;              // 3×1 translation in world
+
+  QMatrix4x4 Tw;
+  Tw.setToIdentity();
+  for (int i = 0; i < 3; ++i)
+    for (int j = 0; j < 3; ++j)
+      Tw(i, j) = Rw(i, j);
+  Tw(0, 3) = tw.x();
+  Tw(1, 3) = tw.y();
+  Tw(2, 3) = tw.z();
+
+  printHomegenousTransform(Tw, "T_world");
+  sceneManager.push_back(pcl);
+  sceneManager.push_back(pcl2);
+
+  // pcl2->affineMap(R);
+  // sceneManager.push_back(pcl2);
+  //
   // auto *kd = new KdTree(*pcl);
   // sceneManager.push_back(kd);
 

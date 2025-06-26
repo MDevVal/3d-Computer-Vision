@@ -132,3 +132,27 @@ void PointCloud::computePCA(Eigen::Vector3f &c, Eigen::Matrix3f &R,
   R = es.eigenvectors();
   L = es.eigenvalues();
 }
+
+const Eigen::Vector3f &PointCloud::centroid() const {
+  if (!pcaValid) {
+    computePCA(pcaCentroid, pcaEV, pcaLambda);
+    pcaValid = true;
+  }
+  return pcaCentroid;
+}
+const Eigen::Matrix3f &PointCloud::eigenVectors() const {
+  if (!pcaValid) {
+    Eigen::Vector3f dummy;
+    computePCA(pcaCentroid, pcaEV, pcaLambda);
+    pcaValid = true;
+  }
+  return pcaEV;
+}
+const Eigen::Vector3f &PointCloud::eigenValues() const {
+  if (!pcaValid) {
+    Eigen::Matrix3f dummyR;
+    computePCA(pcaCentroid, pcaEV, pcaLambda);
+    pcaValid = true;
+  }
+  return pcaLambda;
+}
